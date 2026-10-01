@@ -6,7 +6,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   verify:
@@ -22,3 +22,59 @@ jobs:
         run: npm test
       - name: Run production verifier
         run: npm run check
+
+  package-release:
+    if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build verified release artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          rm -rf releases
+          mkdir -p releases
+          npm run package:vsix
+          npm run package:release
+          zip -q -r "releases/antigravity-cortex-plugin-${VERSION}.zip" antigravity-plugin/cortex
+          {
+            echo "Cortex v${VERSION} verification"
+            echo "=============================="
+            echo "Source commit: ${GITHUB_SHA}"
+            echo "GitHub workflow: ${GITHUB_WORKFLOW}"
+            echo "Automated tests: PASS"
+            echo "Production verifier: PASS"
+            echo "Release packaging: PASS"
+            echo "Generated on: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } > "releases/VERIFICATION-${VERSION}.txt"
+          sha256sum \
+            "releases/antigravity-cortex-${VERSION}.vsix" \
+            "releases/antigravity-cortex-plugin-${VERSION}.zip" \
+            "releases/antigravity-cortex-${VERSION}-source.zip" \
+            > "releases/CHECKSUMS-${VERSION}.txt"
+          unzip -t "releases/antigravity-cortex-${VERSION}.vsix" >/dev/null
+          unzip -t "releases/antigravity-cortex-plugin-${VERSION}.zip" >/dev/null
+          unzip -t "releases/antigravity-cortex-${VERSION}-source.zip" >/dev/null
+      - name: Publish prebuilt artifacts into repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f releases
+          if git diff --cached --quiet; then
+            echo "Release artifacts are already current."
+            exit 0
+          fi
+          VERSION="$(node -p "require('./package.json').version")"
+          git commit -m "chore(release): publish Cortex v${VERSION} artifacts"
+          git push origin HEAD:main
