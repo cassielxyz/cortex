@@ -165,7 +165,7 @@ DockyardOS workspace              Cortex workspace
 
 No build is required. Download the verified v1.0.0 extension:
 
-**[Download Cortex v1.0.0 VSIX](releases/antigravity-cortex-1.0.0.vsix)**
+**[Download Cortex v1.0.0 VSIX](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)**
 
 Then:
 
@@ -181,11 +181,11 @@ If Doctor passes, Cortex is ready. The extension stays passive in other workspac
 
 Release files:
 
-- [VSIX installer](releases/antigravity-cortex-1.0.0.vsix)
-- [Standalone Antigravity plugin](releases/antigravity-cortex-plugin-1.0.0.zip)
-- [Complete v1.0.0 source ZIP](releases/antigravity-cortex-1.0.0-source.zip)
-- [Verification report](releases/VERIFICATION-1.0.0.txt)
-- [SHA-256 checksums](releases/CHECKSUMS-1.0.0.txt)
+- [VSIX installer](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)
+- [Standalone Antigravity plugin](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-plugin-1.0.0.zip)
+- [Complete v1.0.0 source ZIP](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0-source.zip)
+- [Verification report](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/VERIFICATION-1.0.0.txt)
+- [SHA-256 checksums](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/CHECKSUMS-1.0.0.txt)
 
 ### Build from source
 
@@ -301,7 +301,7 @@ npm test
 npm run check
 ```
 
-Release installers, packaged source, the verification report, and checksums are published under [`releases/`](releases/). The source tree and CI remain available for independent auditing and rebuilds.
+Release installers, packaged source, the verification report, and checksums are published as verified assets on the [Cortex v1.0.0 GitHub Release](https://github.com/cassielxyz/cortex/releases/tag/v1.0.0). The source tree and CI remain available for independent auditing and rebuilds.
 
 ## Repository map
 
@@ -312,7 +312,6 @@ cortex/
 ├── catalog/              trusted skill routing catalog
 ├── docs/                 architecture, isolation, install and security docs
 ├── dist/                 generated local build output
-├── releases/             prebuilt VSIX, plugin/source ZIPs + verification files
 ├── scripts/              package and verification helpers
 ├── src/                  Cortex runtime
 ├── test/                 isolation, memory, routing and security tests
