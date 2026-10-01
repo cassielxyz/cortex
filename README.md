@@ -161,7 +161,33 @@ DockyardOS workspace              Cortex workspace
 
 ## Install
 
-### Build and install the VSIX
+### Fastest install — recommended
+
+No build is required. Download the verified v1.0.0 extension:
+
+**[Download Cortex v1.0.0 VSIX](releases/antigravity-cortex-1.0.0.vsix)**
+
+Then:
+
+1. Open **Antigravity**.
+2. Open **Extensions**.
+3. Choose **Install from VSIX…**.
+4. Select `antigravity-cortex-1.0.0.vsix`.
+5. Open the project you want Cortex to manage.
+6. Open the Command Palette and run `Cortex: Enable for Workspace`.
+7. Run `Cortex: Doctor`.
+
+If Doctor passes, Cortex is ready. The extension stays passive in other workspaces until explicitly enabled.
+
+Release files:
+
+- [VSIX installer](releases/antigravity-cortex-1.0.0.vsix)
+- [Standalone Antigravity plugin](releases/antigravity-cortex-plugin-1.0.0.zip)
+- [Complete v1.0.0 source ZIP](releases/antigravity-cortex-1.0.0-source.zip)
+- [Verification report](releases/VERIFICATION-1.0.0.txt)
+- [SHA-256 checksums](releases/CHECKSUMS-1.0.0.txt)
+
+### Build from source
 
 Requirements: Node.js + Git.
 
@@ -173,17 +199,12 @@ npm run check
 npm run package:vsix
 ```
 
-The packaging command creates the installable `.vsix`. Then:
+Install the generated `.vsix` through **Extensions → Install from VSIX…**, then run:
 
-1. Open **Antigravity**.
-2. Open **Extensions**.
-3. Choose **Install from VSIX…**.
-4. Select the generated Cortex VSIX.
-5. Open the project you want Cortex to manage.
-6. Run `Cortex: Enable for Workspace`.
-7. Run `Cortex: Doctor`.
-
-If Doctor passes, Cortex is ready.
+```text
+Cortex: Enable for Workspace
+Cortex: Doctor
+```
 
 ## First use
 
