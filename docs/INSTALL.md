@@ -1,6 +1,30 @@
 # Install Cortex
 
-## Build and install the VSIX
+## Fastest install — recommended
+
+Download the verified v1.0.0 VSIX from GitHub Releases:
+
+**[Download Cortex v1.0.0 VSIX](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)**
+
+Then:
+
+1. Open Antigravity.
+2. Open **Extensions**.
+3. Choose **Install from VSIX…**.
+4. Select `antigravity-cortex-1.0.0.vsix`.
+5. Open the project you want Cortex to manage.
+6. Open the Command Palette.
+7. Run **Cortex: Enable for Workspace**.
+8. Run **Cortex: Doctor**.
+
+Other verified release assets:
+
+- [Standalone Antigravity plugin](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-plugin-1.0.0.zip)
+- [Complete source ZIP](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0-source.zip)
+- [Verification report](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/VERIFICATION-1.0.0.txt)
+- [SHA-256 checksums](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/CHECKSUMS-1.0.0.txt)
+
+## Build and install from source
 
 Requirements: Node.js and Git.
 
@@ -69,7 +93,7 @@ No special uninstall is required. Cortex detects DockyardOS and refuses primary 
 
 ## Update
 
-Pull the newer source, rebuild the VSIX, and install it over the existing Cortex extension. Re-run **Cortex: Doctor** after updating.
+Download the newer VSIX from GitHub Releases and install it over the existing Cortex extension, or pull the repository and rebuild from source. Re-run **Cortex: Doctor** after updating.
 
 ## Disable for one project
 
