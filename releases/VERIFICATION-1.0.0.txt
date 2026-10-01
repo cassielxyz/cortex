@@ -1,8 +1,0 @@
-Cortex v1.0.0 verification
-==============================
-Source commit: 6021dfe4767e663852856aa919762cbeb5cd4c09
-GitHub workflow: Verify Cortex
-Automated tests: PASS
-Production verifier: PASS
-Release packaging: PASS
-Generated on: 2026-10-01T20:28:08Z

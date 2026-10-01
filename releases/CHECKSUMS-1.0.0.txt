@@ -1,3 +1,0 @@
-bbfde1b4c7716a4d482f9cf20f8a1800bc977db956c10841170fd0baf7c866dd  releases/antigravity-cortex-1.0.0.vsix
-4963e0b22816bf0adb4fe8b58e8869105385f8402824385cd974bc56d7603797  releases/antigravity-cortex-plugin-1.0.0.zip
-6550d4e75e2ef0bc897c5a1c8df7214b7cffda3c34ddaf05bc149228481c7ff2  releases/antigravity-cortex-1.0.0-source.zip
