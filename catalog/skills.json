@@ -86,7 +86,11 @@
       "upstreamName": "ui-ux-pro-max",
       "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
       "ref": "main",
-      "skillDir": ".gemini/skills/ui-ux-pro-max",
+      "skillDir": ".claude/skills/ui-ux-pro-max",
+      "skillDirs": [
+        ".claude/skills/ui-ux-pro-max",
+        ".gemini/skills/ui-ux-pro-max"
+      ],
       "license": "MIT",
       "trusted": true,
       "description": "UI/UX design intelligence for multi-platform interfaces.",
