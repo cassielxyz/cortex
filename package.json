@@ -1,7 +1,7 @@
 {
   "name": "antigravity-cortex",
   "displayName": "Cortex for Antigravity",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "cassiel",
   "license": "MIT",
   "private": false,
@@ -24,8 +24,10 @@
     "security"
   ],
   "activationEvents": [
-    "onCommand:cortex.initializeWorkspace",
+    "*",
     "onStartupFinished",
+    "onView:cortex.projectView",
+    "onCommand:cortex.initializeWorkspace",
     "onCommand:cortex.enableWorkspace",
     "onCommand:cortex.disableWorkspace",
     "onCommand:cortex.checkpoint",
@@ -87,6 +89,55 @@
       {
         "command": "cortex.configureInspo",
         "title": "Cortex: Toggle Inspo MCP"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cortex",
+          "title": "Cortex",
+          "icon": "assets/cortex-activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "cortex": [
+        {
+          "id": "cortex.projectView",
+          "name": "Project"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "cortex.projectView",
+        "contents": "### Cortex\nOpen a project folder to initialize Cortex.",
+        "when": "!cortex.hasWorkspace"
+      },
+      {
+        "view": "cortex.projectView",
+        "contents": "### Cortex\nAnother orchestrator owns this workspace, so Cortex will stay passive.",
+        "when": "cortex.hasWorkspace && cortex.blocked"
+      },
+      {
+        "view": "cortex.projectView",
+        "contents": "### Cortex Observer\nCortex is read-only because another orchestrator owns this workspace.\n\n[Show Status](command:cortex.status)",
+        "when": "cortex.hasWorkspace && cortex.observer"
+      },
+      {
+        "view": "cortex.projectView",
+        "contents": "### Initialize Cortex\nOne-time setup installs trusted skills, recovery, verification, and project memory.\n\n[Initialize Cortex](command:cortex.initializeWorkspace)",
+        "when": "cortex.hasWorkspace && !cortex.initialized && !cortex.blocked && !cortex.observer"
+      },
+      {
+        "view": "cortex.projectView",
+        "contents": "### Repair Cortex\nSetup has warnings or missing components. Cortex will retry only what is needed.\n\n[Repair Cortex](command:cortex.initializeWorkspace)",
+        "when": "cortex.hasWorkspace && cortex.needsRepair"
+      },
+      {
+        "view": "cortex.projectView",
+        "contents": "### Cortex Ready\nThis project is initialized. Use Antigravity normally; Cortex manages context, checkpoints, routing, and verification.\n\n[Show Status](command:cortex.status)\n\n[Save Checkpoint](command:cortex.checkpoint)\n\n[Resume Project](command:cortex.resume)",
+        "when": "cortex.hasWorkspace && cortex.ready"
       }
     ],
     "configuration": {
@@ -162,6 +213,7 @@
     "antigravity-plugin",
     "catalog",
     "docs",
+    "assets",
     "README.md",
     "LICENSE"
   ],
