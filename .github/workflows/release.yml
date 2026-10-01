@@ -1,0 +1,106 @@
+name: Publish Cortex Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cortex-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether version is already published
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        shell: bash
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run full verification
+        if: steps.existing.outputs.exists != 'true'
+        run: |
+          npm test
+          npm run check
+
+      - name: Build release packages
+        if: steps.existing.outputs.exists != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          rm -rf releases
+          mkdir -p releases
+          npm run package:vsix
+          npm run package:release
+          (cd antigravity-plugin && zip -q -r "../releases/antigravity-cortex-plugin-${VERSION}.zip" cortex)
+          sha256sum \
+            "releases/antigravity-cortex-${VERSION}.vsix" \
+            "releases/antigravity-cortex-${VERSION}-source.zip" \
+            "releases/antigravity-cortex-plugin-${VERSION}.zip" \
+            > "releases/CHECKSUMS-${VERSION}.txt"
+          {
+            echo "Cortex for Antigravity v${VERSION} — GitHub Release Verification"
+            echo "Commit: ${GITHUB_SHA}"
+            echo "Runner: ${RUNNER_OS}"
+            echo
+            echo "RESULT: PASS"
+            echo "- npm test: PASS"
+            echo "- npm run check: PASS"
+            echo "- VSIX package: BUILT"
+            echo "- source package: BUILT"
+            echo "- plugin package: BUILT"
+            echo "- SHA-256 manifest: GENERATED"
+          } > "releases/VERIFICATION-${VERSION}.txt"
+          unzip -t "releases/antigravity-cortex-${VERSION}.vsix"
+          unzip -t "releases/antigravity-cortex-${VERSION}-source.zip"
+          unzip -t "releases/antigravity-cortex-plugin-${VERSION}.zip"
+
+      - name: Publish GitHub Release
+        if: steps.existing.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        shell: bash
+        run: |
+          gh release create "$TAG" \
+            "releases/antigravity-cortex-${VERSION}.vsix" \
+            "releases/antigravity-cortex-${VERSION}-source.zip" \
+            "releases/antigravity-cortex-plugin-${VERSION}.zip" \
+            "releases/CHECKSUMS-${VERSION}.txt" \
+            "releases/VERIFICATION-${VERSION}.txt" \
+            --target "$GITHUB_SHA" \
+            --title "Cortex v${VERSION}" \
+            --notes "Production release of Cortex for Antigravity. Install the VSIX, enable Cortex for your workspace, then run Cortex: Doctor. This release was built and verified by GitHub Actions from the tagged source commit."
+
+      - name: Existing release
+        if: steps.existing.outputs.exists == 'true'
+        run: echo "${{ steps.version.outputs.tag }} is already published; no release assets were replaced."
