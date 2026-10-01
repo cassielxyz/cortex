@@ -1,11 +1,11 @@
 {
   "name": "antigravity-cortex",
   "displayName": "Cortex for Antigravity",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "publisher": "cassiel",
   "license": "MIT",
   "private": false,
-  "description": "Workspace-scoped orchestration, selective skills, durable recovery, deterministic verification and security gates for Google Antigravity.",
+  "description": "Workspace-scoped Antigravity orchestration with durable recovery, automatic skill routing, cinematic web workflows, deterministic verification and security gates.",
   "main": "extension.js",
   "engines": {
     "vscode": "^1.95.0"
@@ -21,7 +21,11 @@
     "checkpoint",
     "memory",
     "verification",
-    "security"
+    "security",
+    "threejs",
+    "gsap",
+    "cinematic-web",
+    "scroll-animation"
   ],
   "activationEvents": [
     "*",
@@ -44,7 +48,7 @@
     "commands": [
       {
         "command": "cortex.initializeWorkspace",
-        "title": "Cortex: Initialize Project (One Click)"
+        "title": "Cortex: Initialize / Upgrade Project"
       },
       {
         "command": "cortex.enableWorkspace",
@@ -126,7 +130,7 @@
       },
       {
         "view": "cortex.projectView",
-        "contents": "### Initialize Cortex\nOne-time setup installs trusted skills, recovery, verification, and project memory.\n\n[Initialize Cortex](command:cortex.initializeWorkspace)",
+        "contents": "### Initialize / Upgrade Cortex\nOne click installs trusted skills, refreshes the workspace plugin, recovery, verification, cinematic-web routing, and project memory.\n\n[Initialize Cortex](command:cortex.initializeWorkspace)",
         "when": "cortex.hasWorkspace && !cortex.initialized && !cortex.blocked && !cortex.observer"
       },
       {
@@ -136,7 +140,7 @@
       },
       {
         "view": "cortex.projectView",
-        "contents": "### Cortex Ready\nThis project is initialized. Use Antigravity normally; Cortex manages context, checkpoints, routing, and verification.\n\n[Show Status](command:cortex.status)\n\n[Save Checkpoint](command:cortex.checkpoint)\n\n[Resume Project](command:cortex.resume)",
+        "contents": "### Cortex Ready\nThis project is initialized. Use Antigravity normally; Cortex manages context, checkpoints, automatic task routing, skills, visual verification, and recovery.\n\n[Show Status](command:cortex.status)\n\n[Save Checkpoint](command:cortex.checkpoint)\n\n[Resume Project](command:cortex.resume)",
         "when": "cortex.hasWorkspace && cortex.ready"
       }
     ],
@@ -169,7 +173,7 @@
         "cortex.autoInstallTrustedSkills": {
           "type": "boolean",
           "default": true,
-          "description": "Allow Cortex to clone allow-listed skill repositories when a routed task needs a missing skill. Installer never runs third-party install scripts."
+          "description": "Allow Cortex to clone allow-listed skill repositories when initialization or an upgrade needs a missing skill. Installer never runs third-party install scripts."
         },
         "cortex.skillScope": {
           "type": "string",
