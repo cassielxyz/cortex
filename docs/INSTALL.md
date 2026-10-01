@@ -11,8 +11,12 @@ In Antigravity:
 1. Open **Extensions**.
 2. Choose **Install from VSIX…**.
 3. Select `antigravity-cortex-latest.vsix`.
-4. Open the project you want Cortex to manage.
-5. Click **Initialize Cortex** in the status bar.
+4. Reload Antigravity when prompted.
+5. Open the project you want Cortex to manage.
+6. Click the **Cortex brain icon** in the left Activity Bar.
+7. In the Cortex Project panel, click **Initialize Cortex**.
+
+Cortex also exposes the same action in the status bar when the status bar is visible, but the Activity Bar panel is the primary setup UI and remains available even when the status bar is hidden.
 
 No command sequence is required for normal setup.
 
@@ -34,9 +38,9 @@ The one-click initializer runs once for an eligible project and automatically:
 - writes an initialization receipt;
 - creates the final checkpoint and resume capsule.
 
-When setup succeeds, the status bar changes to **Cortex Ready**.
+When setup succeeds, the Cortex panel changes to **Cortex Ready**.
 
-If a skill download or project verification has a problem, the status bar changes to **Repair Cortex**. Clicking it retries the missing setup without blindly rebuilding the entire project state.
+If a skill download or project verification has a problem, the panel changes to **Repair Cortex**. Clicking it retries the missing setup without blindly rebuilding the entire project state.
 
 ## One-time project behavior
 
@@ -52,6 +56,10 @@ Cortex refuses primary initialization inside DockyardOS. If another known orches
 
 Manual commands remain available for troubleshooting and power users, including **Save Checkpoint**, **Resume Project**, **Verify Workspace**, **Security Audit**, **Install Trusted Skills**, and **Doctor**. They are not required for normal initialization.
 
+## If the Cortex icon is missing
+
+First confirm you installed the latest release, then reload Antigravity. Cortex now contributes its own Activity Bar container and activates on startup and when the Cortex view is opened. Older v1.1.0 builds only exposed the initializer in the status bar, so upgrade before troubleshooting further.
+
 ## Build from source
 
 ```bash
@@ -62,7 +70,7 @@ npm run check
 npm run package:vsix
 ```
 
-Then install the generated VSIX and click **Initialize Cortex**.
+Then install the generated VSIX, open the Cortex Activity Bar panel, and click **Initialize Cortex**.
 
 ## Uninstall
 
