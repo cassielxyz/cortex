@@ -1,0 +1,5 @@
+'use strict';
+const test=require('node:test');const assert=require('node:assert/strict');const {routeTask,rewriteSkillName,namespacedSkillName}=require('../src');
+test('UI route selects design, browser and completion skills without unrelated security tools',()=>{const r=routeTask('Build a responsive dashboard UI from a screenshot and verify interactions');assert.ok(r.externalSkills.includes('ui-ux-pro-max'));assert.ok(r.externalSkills.includes('taste'));assert.ok(r.externalSkills.includes('image-to-code'));assert.ok(r.bundledSkills.includes('cortex-playwright'));assert.ok(r.externalSkills.includes('superpowers-verification-before-completion'));});
+test('debug route selects systematic debugging',()=>{assert.ok(routeTask('Fix this crashing parser error').externalSkills.includes('superpowers-systematic-debugging'));});
+test('skill rewrite namespaces YAML name',()=>{const out=rewriteSkillName('---\nname: taste\ndescription: hello\n---\n# X\n',namespacedSkillName('taste'),'x');assert.match(out,/name: cortex-taste/);assert.match(out,/# X/);});

@@ -1,0 +1,170 @@
+{
+  "name": "antigravity-cortex",
+  "displayName": "Cortex for Antigravity",
+  "version": "1.0.0",
+  "publisher": "cassiel",
+  "license": "MIT",
+  "private": false,
+  "description": "Workspace-scoped orchestration, selective skills, durable recovery, deterministic verification and security gates for Google Antigravity.",
+  "main": "extension.js",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "antigravity",
+    "agents",
+    "skills",
+    "checkpoint",
+    "memory",
+    "verification",
+    "security"
+  ],
+  "activationEvents": [
+    "onCommand:cortex.enableWorkspace",
+    "onCommand:cortex.disableWorkspace",
+    "onCommand:cortex.checkpoint",
+    "onCommand:cortex.resume",
+    "onCommand:cortex.status",
+    "onCommand:cortex.doctor",
+    "onCommand:cortex.routeTask",
+    "onCommand:cortex.ensureSkills",
+    "onCommand:cortex.verifyWorkspace",
+    "onCommand:cortex.securityAudit",
+    "onCommand:cortex.configureInspo"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "cortex.enableWorkspace",
+        "title": "Cortex: Enable for Workspace"
+      },
+      {
+        "command": "cortex.disableWorkspace",
+        "title": "Cortex: Disable for Workspace"
+      },
+      {
+        "command": "cortex.checkpoint",
+        "title": "Cortex: Save Checkpoint"
+      },
+      {
+        "command": "cortex.resume",
+        "title": "Cortex: Resume Project"
+      },
+      {
+        "command": "cortex.status",
+        "title": "Cortex: Show Status"
+      },
+      {
+        "command": "cortex.doctor",
+        "title": "Cortex: Doctor"
+      },
+      {
+        "command": "cortex.routeTask",
+        "title": "Cortex: Route Task & Ensure Skills"
+      },
+      {
+        "command": "cortex.ensureSkills",
+        "title": "Cortex: Install Trusted Skills"
+      },
+      {
+        "command": "cortex.verifyWorkspace",
+        "title": "Cortex: Verify Workspace"
+      },
+      {
+        "command": "cortex.securityAudit",
+        "title": "Cortex: Security Audit"
+      },
+      {
+        "command": "cortex.configureInspo",
+        "title": "Cortex: Toggle Inspo MCP"
+      }
+    ],
+    "configuration": {
+      "title": "Cortex",
+      "properties": {
+        "cortex.checkpointIntervalMinutes": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 60,
+          "default": 5,
+          "description": "Fallback checkpoint interval. File/tool events also create coalesced checkpoints."
+        },
+        "cortex.eventCheckpointDebounceSeconds": {
+          "type": "number",
+          "minimum": 5,
+          "maximum": 300,
+          "default": 30,
+          "description": "Minimum time between event-driven checkpoints."
+        },
+        "cortex.foreignOrchestratorPolicy": {
+          "type": "string",
+          "enum": [
+            "block",
+            "observer"
+          ],
+          "default": "block",
+          "description": "Behavior if DockyardOS, GameFoundry or another known orchestrator is active."
+        },
+        "cortex.autoInstallTrustedSkills": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow Cortex to clone allow-listed skill repositories when a routed task needs a missing skill. Installer never runs third-party install scripts."
+        },
+        "cortex.skillScope": {
+          "type": "string",
+          "enum": [
+            "ide-global",
+            "cli-global",
+            "both"
+          ],
+          "default": "ide-global",
+          "description": "Where namespaced third-party skills are installed."
+        },
+        "cortex.runSecurityAfterVerify": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run Cortex deterministic secret scan after workspace verification."
+        },
+        "cortex.allowExternalSecurityTools": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow optional local tools such as gitleaks/osv-scanner during security audit."
+        },
+        "cortex.maxCheckpointHistory": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 1000,
+          "default": 200,
+          "description": "Maximum checkpoint files retained per project."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node scripts/verify.js",
+    "package:vsix": "node scripts/package-vsix.js",
+    "package:release": "node scripts/package-release.js"
+  },
+  "files": [
+    "extension.js",
+    "src",
+    "antigravity-plugin",
+    "catalog",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cassielxyz/cortex.git"
+  },
+  "homepage": "https://github.com/cassielxyz/cortex#readme",
+  "bugs": {
+    "url": "https://github.com/cassielxyz/cortex/issues"
+  }
+}

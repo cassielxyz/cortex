@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cortex-inspo": {
+      "serverUrl": "https://inspomcp.dev/api/mcp",
+      "disabled": true
+    }
+  }
+}

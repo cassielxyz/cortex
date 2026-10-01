@@ -1,0 +1,4 @@
+'use strict';
+function classifyContextItem(item){if(['active-task','error','changed-file','verification-failure','blocker'].includes(item?.kind))return'hot';if(['architecture','decision','requirement','checkpoint','verification'].includes(item?.kind))return'warm';return'cold';}
+function compactContext(items,maxChars=24000){const buckets={hot:[],warm:[],cold:[]};for(const item of items||[])buckets[classifyContextItem(item)].push(item);const ordered=[...buckets.hot,...buckets.warm,...buckets.cold];const selected=[];let used=0;for(const item of ordered){const text=typeof item==='string'?item:String(item?.text||item?.summary||'');if(!text)continue;if(used+text.length>maxChars&&selected.length)continue;selected.push({...item,text});used+=text.length;if(used>=maxChars)break;}return{selected,usedChars:used,dropped:Math.max(0,ordered.length-selected.length)};}
+module.exports={classifyContextItem,compactContext};

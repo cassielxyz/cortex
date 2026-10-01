@@ -1,0 +1,5 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "cortex",
+  "description": "Workspace-scoped orchestration, selective skills, durable recovery, verification and security gates. Designed to stay isolated from DockyardOS and other orchestrators."
+}

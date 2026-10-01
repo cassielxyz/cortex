@@ -1,0 +1,34 @@
+{
+  "cortex-context": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node .agents/plugins/cortex/scripts/hook.js pre-invocation",
+        "timeout": 5
+      }
+    ]
+  },
+  "cortex-events": {
+    "PostToolUse": [
+      {
+        "matcher": "run_command|write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .agents/plugins/cortex/scripts/hook.js post-tool",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "cortex-completion-gate": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node .agents/plugins/cortex/scripts/hook.js stop",
+        "timeout": 8
+      }
+    ]
+  }
+}

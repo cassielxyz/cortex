@@ -1,0 +1,46 @@
+<svg width="1600" height="620" viewBox="0 0 1600 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="50" x2="1510" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#070912"/>
+      <stop offset="0.5" stop-color="#12102A"/>
+      <stop offset="1" stop-color="#071821"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="1030" y1="90" x2="1450" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A875FF"/>
+      <stop offset="0.55" stop-color="#45D9FF"/>
+      <stop offset="1" stop-color="#6CFFB8"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="620" rx="42" fill="url(#bg)"/>
+  <g opacity="0.14" stroke="#8BDFFF">
+    <path d="M0 90H1600M0 180H1600M0 270H1600M0 360H1600M0 450H1600M0 540H1600"/>
+    <path d="M120 0V620M240 0V620M360 0V620M480 0V620M600 0V620M720 0V620M840 0V620M960 0V620M1080 0V620M1200 0V620M1320 0V620M1440 0V620"/>
+  </g>
+  <circle cx="1310" cy="310" r="210" stroke="url(#accent)" stroke-width="2" opacity="0.35"/>
+  <circle cx="1310" cy="310" r="160" stroke="url(#accent)" stroke-width="2" opacity="0.25"/>
+  <g stroke="url(#accent)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M1272 186C1224 188 1188 226 1188 273C1156 290 1143 329 1158 361C1170 386 1195 401 1221 401C1231 438 1266 465 1307 465"/>
+    <path d="M1348 186C1396 188 1432 226 1432 273C1464 290 1477 329 1462 361C1450 386 1425 401 1399 401C1389 438 1354 465 1313 465"/>
+    <path d="M1309 182V468"/>
+    <path d="M1267 236C1292 246 1306 266 1309 290M1352 236C1327 246 1313 266 1310 290"/>
+    <path d="M1217 321C1250 315 1280 326 1308 351M1401 321C1368 315 1338 326 1310 351"/>
+  </g>
+  <g fill="#DDF8FF">
+    <circle cx="1188" cy="273" r="8"/><circle cx="1158" cy="361" r="8"/><circle cx="1221" cy="401" r="8"/>
+    <circle cx="1432" cy="273" r="8"/><circle cx="1462" cy="361" r="8"/><circle cx="1399" cy="401" r="8"/>
+  </g>
+  <text x="110" y="220" fill="white" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="86" font-weight="800" letter-spacing="-3">CORTEX</text>
+  <text x="110" y="292" fill="#B9C7DA" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="30" font-weight="500">Persistent intelligence layer for Antigravity</text>
+  <text x="110" y="370" fill="#D9E4F2" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="24">Plan · Route · Build · Verify · Secure · Remember</text>
+  <g transform="translate(110 430)">
+    <rect width="198" height="48" rx="24" fill="#A875FF" fill-opacity="0.16" stroke="#A875FF"/>
+    <text x="24" y="31" fill="#D8C4FF" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">v1.0.0 verified</text>
+    <rect x="220" width="262" height="48" rx="24" fill="#45D9FF" fill-opacity="0.12" stroke="#45D9FF"/>
+    <text x="244" y="31" fill="#B7F2FF" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Workspace isolated</text>
+  </g>
+  <text x="110" y="548" fill="#718198" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18">cassielxyz/cortex</text>
+</svg>
