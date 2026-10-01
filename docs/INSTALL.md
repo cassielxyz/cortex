@@ -1,32 +1,58 @@
 # Install Cortex
 
-## Fastest install — recommended
+## 1. Install the extension
 
-Download the verified v1.0.0 VSIX from GitHub Releases:
+Download the latest verified VSIX:
 
-**[Download Cortex v1.0.0 VSIX](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)**
+https://github.com/cassielxyz/cortex/releases/latest/download/antigravity-cortex-latest.vsix
 
-Then:
+In Antigravity:
 
-1. Open Antigravity.
-2. Open **Extensions**.
-3. Choose **Install from VSIX…**.
-4. Select `antigravity-cortex-1.0.0.vsix`.
-5. Open the project you want Cortex to manage.
-6. Open the Command Palette.
-7. Run **Cortex: Enable for Workspace**.
-8. Run **Cortex: Doctor**.
+1. Open **Extensions**.
+2. Choose **Install from VSIX…**.
+3. Select `antigravity-cortex-latest.vsix`.
+4. Open the project you want Cortex to manage.
+5. Click **Initialize Cortex** in the status bar.
 
-Other verified release assets:
+No command sequence is required for normal setup.
 
-- [Standalone Antigravity plugin](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-plugin-1.0.0.zip)
-- [Complete source ZIP](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0-source.zip)
-- [Verification report](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/VERIFICATION-1.0.0.txt)
-- [SHA-256 checksums](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/CHECKSUMS-1.0.0.txt)
+## 2. What Initialize Cortex does
 
-## Build and install from source
+The one-click initializer runs once for an eligible project and automatically:
 
-Requirements: Node.js and Git.
+- checks DockyardOS/foreign-orchestrator isolation;
+- installs or refreshes `.agents/plugins/cortex/`;
+- adds Cortex private workspace paths to Git's local exclude file;
+- installs all allow-listed trusted skills using static copies only;
+- namespaces installed skills as `cortex-*`;
+- configures safe MCP defaults (Inspo remains disabled until explicitly enabled);
+- creates durable project identity and recovery state under `~/.antigravity-cortex/`;
+- creates an initial checkpoint;
+- runs deterministic project verification;
+- runs built-in redacted secret/security checks;
+- runs Cortex Doctor;
+- writes an initialization receipt;
+- creates the final checkpoint and resume capsule.
+
+When setup succeeds, the status bar changes to **Cortex Ready**.
+
+If a skill download or project verification has a problem, the status bar changes to **Repair Cortex**. Clicking it retries the missing setup without blindly rebuilding the entire project state.
+
+## One-time project behavior
+
+Cortex remembers initialization per project. Reopening the project does not reinstall skills or rebuild initialization from scratch. The extension verifies the receipt and workspace plugin before showing **Cortex Ready**.
+
+If the workspace plugin is deleted or setup becomes unhealthy, Cortex detects that and offers initialization/repair again.
+
+## DockyardOS users
+
+Cortex refuses primary initialization inside DockyardOS. If another known orchestrator already owns a workspace, Cortex follows `cortex.foreignOrchestratorPolicy` (default: `block`).
+
+## Advanced commands
+
+Manual commands remain available for troubleshooting and power users, including **Save Checkpoint**, **Resume Project**, **Verify Workspace**, **Security Audit**, **Install Trusted Skills**, and **Doctor**. They are not required for normal initialization.
+
+## Build from source
 
 ```bash
 git clone https://github.com/cassielxyz/cortex.git
@@ -36,75 +62,8 @@ npm run check
 npm run package:vsix
 ```
 
-The packaging command creates an installable Cortex `.vsix` locally.
-
-1. Open Antigravity.
-2. Open **Extensions**.
-3. Choose **Install from VSIX…**.
-4. Select the generated Cortex VSIX.
-5. Open the project you want Cortex to manage.
-6. Open the Command Palette.
-7. Run **Cortex: Enable for Workspace**.
-8. Run **Cortex: Doctor**.
-
-The global extension stays passive until a workspace is explicitly enabled.
-
-## What enabling a workspace changes
-
-Cortex installs a workspace-scoped Antigravity plugin at:
-
-```text
-.agents/plugins/cortex/
-```
-
-It also creates a small workspace ownership marker under `.agents/cortex/`. Cortex places its private workspace paths in Git's local exclude file where possible, so the project repository does not need to commit Cortex runtime state.
-
-Durable checkpoints and recovery state live outside the repository:
-
-```text
-~/.antigravity-cortex/projects/<project-id>/
-```
-
-## Skill setup
-
-Cortex can install allow-listed skills only when the router needs them. Use:
-
-```text
-Cortex: Route Task & Ensure Skills
-```
-
-or:
-
-```text
-Cortex: Install Trusted Skills
-```
-
-The default IDE-global skill directory is:
-
-```text
-~/.gemini/config/skills/
-```
-
-Cortex uses `cortex-*` names so it does not overwrite skills owned by another orchestrator.
-
-## DockyardOS users
-
-No special uninstall is required. Cortex detects DockyardOS and refuses primary activation there by default. Do not change `cortex.foreignOrchestratorPolicy` from `block` unless you specifically want read-only observer behavior.
-
-## Update
-
-Download the newer VSIX from GitHub Releases and install it over the existing Cortex extension, or pull the repository and rebuild from source. Re-run **Cortex: Doctor** after updating.
-
-## Disable for one project
-
-Run:
-
-```text
-Cortex: Disable for Workspace
-```
-
-This disables Cortex ownership for that workspace without touching another orchestrator.
+Then install the generated VSIX and click **Initialize Cortex**.
 
 ## Uninstall
 
-Use the Extensions panel to uninstall **Cortex for Antigravity**. Project checkpoint history under `~/.antigravity-cortex/` is intentionally not deleted automatically, so uninstalling the extension cannot silently destroy recovery history.
+Uninstall **Cortex for Antigravity** from Extensions. Durable recovery history under `~/.antigravity-cortex/` is intentionally preserved so uninstalling cannot silently destroy project checkpoints.

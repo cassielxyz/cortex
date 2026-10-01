@@ -1,7 +1,7 @@
 {
   "name": "antigravity-cortex",
   "displayName": "Cortex for Antigravity",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "cassiel",
   "license": "MIT",
   "private": false,
@@ -24,6 +24,8 @@
     "security"
   ],
   "activationEvents": [
+    "onCommand:cortex.initializeWorkspace",
+    "onStartupFinished",
     "onCommand:cortex.enableWorkspace",
     "onCommand:cortex.disableWorkspace",
     "onCommand:cortex.checkpoint",
@@ -39,8 +41,12 @@
   "contributes": {
     "commands": [
       {
+        "command": "cortex.initializeWorkspace",
+        "title": "Cortex: Initialize Project (One Click)"
+      },
+      {
         "command": "cortex.enableWorkspace",
-        "title": "Cortex: Enable for Workspace"
+        "title": "Cortex: Initialize Project (Legacy Alias)"
       },
       {
         "command": "cortex.disableWorkspace",

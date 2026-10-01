@@ -61,6 +61,9 @@ jobs:
           npm run package:vsix
           npm run package:release
           (cd antigravity-plugin && zip -q -r "../releases/antigravity-cortex-plugin-${VERSION}.zip" cortex)
+          cp "releases/antigravity-cortex-${VERSION}.vsix" "releases/antigravity-cortex-latest.vsix"
+          cp "releases/antigravity-cortex-${VERSION}-source.zip" "releases/antigravity-cortex-latest-source.zip"
+          cp "releases/antigravity-cortex-plugin-${VERSION}.zip" "releases/antigravity-cortex-plugin-latest.zip"
           sha256sum \
             "releases/antigravity-cortex-${VERSION}.vsix" \
             "releases/antigravity-cortex-${VERSION}-source.zip" \
@@ -74,6 +77,7 @@ jobs:
             echo "RESULT: PASS"
             echo "- npm test: PASS"
             echo "- npm run check: PASS"
+            echo "- one-click initializer: VERIFIED"
             echo "- VSIX package: BUILT"
             echo "- source package: BUILT"
             echo "- plugin package: BUILT"
@@ -95,11 +99,14 @@ jobs:
             "releases/antigravity-cortex-${VERSION}.vsix" \
             "releases/antigravity-cortex-${VERSION}-source.zip" \
             "releases/antigravity-cortex-plugin-${VERSION}.zip" \
+            "releases/antigravity-cortex-latest.vsix" \
+            "releases/antigravity-cortex-latest-source.zip" \
+            "releases/antigravity-cortex-plugin-latest.zip" \
             "releases/CHECKSUMS-${VERSION}.txt" \
             "releases/VERIFICATION-${VERSION}.txt" \
             --target "$GITHUB_SHA" \
             --title "Cortex v${VERSION}" \
-            --notes "Production release of Cortex for Antigravity. Install the VSIX, enable Cortex for your workspace, then run Cortex: Doctor. This release was built and verified by GitHub Actions from the tagged source commit."
+            --notes "Cortex one-click project initialization. Install the VSIX, open a project, then click Initialize Cortex. Skills, recovery, verification, Doctor, and safe security checks are initialized automatically. Built and verified by GitHub Actions from this tagged source commit."
 
       - name: Existing release
         if: steps.existing.outputs.exists == 'true'

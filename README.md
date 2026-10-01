@@ -7,8 +7,8 @@
 
   <br/><br/>
 
-  <img alt="version" src="https://img.shields.io/badge/version-1.0.0-A875FF?style=flat-square" />
-  <img alt="tests" src="https://img.shields.io/badge/verification-16%2F16%20passed-45D9FF?style=flat-square" />
+  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-A875FF?style=flat-square" />
+  <img alt="tests" src="https://img.shields.io/badge/verification-17%2F17%20passed-45D9FF?style=flat-square" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-6CFFB8?style=flat-square" />
   <img alt="scope" src="https://img.shields.io/badge/scope-workspace%20isolated-0B1220?style=flat-square" />
 </div>
@@ -163,29 +163,52 @@ DockyardOS workspace              Cortex workspace
 
 ### Fastest install — recommended
 
-No build is required. Download the verified v1.0.0 extension:
+Download the latest verified extension:
 
-**[Download Cortex v1.0.0 VSIX](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)**
+**[Download Cortex VSIX](https://github.com/cassielxyz/cortex/releases/latest/download/antigravity-cortex-latest.vsix)**
 
 Then:
 
 1. Open **Antigravity**.
 2. Open **Extensions**.
 3. Choose **Install from VSIX…**.
-4. Select `antigravity-cortex-1.0.0.vsix`.
+4. Select `antigravity-cortex-latest.vsix`.
 5. Open the project you want Cortex to manage.
-6. Open the Command Palette and run `Cortex: Enable for Workspace`.
-7. Run `Cortex: Doctor`.
+6. Click **`Initialize Cortex`** in the Antigravity status bar.
 
-If Doctor passes, Cortex is ready. The extension stays passive in other workspaces until explicitly enabled.
+That is the complete normal-user setup. Cortex performs the rest automatically once for that project.
 
-Release files:
+### What the Initialize button does
 
-- [VSIX installer](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0.vsix)
-- [Standalone Antigravity plugin](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-plugin-1.0.0.zip)
-- [Complete v1.0.0 source ZIP](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/antigravity-cortex-1.0.0-source.zip)
-- [Verification report](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/VERIFICATION-1.0.0.txt)
-- [SHA-256 checksums](https://github.com/cassielxyz/cortex/releases/download/v1.0.0/CHECKSUMS-1.0.0.txt)
+```text
+Initialize Cortex
+      ↓
+check workspace ownership / DockyardOS isolation
+      ↓
+install or refresh the workspace-scoped Cortex plugin
+      ↓
+install all allow-listed trusted skills (static copy; no upstream installers)
+      ↓
+configure safe MCP defaults
+      ↓
+create project identity + durable recovery state
+      ↓
+create baseline checkpoint
+      ↓
+run deterministic project verification
+      ↓
+run safe built-in security checks
+      ↓
+run Cortex Doctor
+      ↓
+create final checkpoint + resume capsule
+      ↓
+Cortex Ready
+```
+
+Initialization is **idempotent**. Cortex stores an initialization receipt for the project, so reopening Antigravity does not reinstall everything. If a skill download or verification step needs attention, the status-bar action changes to **Repair Cortex** and retries the missing setup.
+
+Cortex also displays a one-time **Initialize Cortex** notification for eligible, uninitialized workspaces. DockyardOS workspaces remain blocked by default and are never taken over.
 
 ### Build from source
 
@@ -199,31 +222,11 @@ npm run check
 npm run package:vsix
 ```
 
-Install the generated `.vsix` through **Extensions → Install from VSIX…**, then run:
-
-```text
-Cortex: Enable for Workspace
-Cortex: Doctor
-```
+Install the generated `.vsix`, open a project, then click **Initialize Cortex** in the status bar.
 
 ## First use
 
-After enabling Cortex for your project, use Antigravity normally. You do not need a special prompt format.
-
-Useful commands:
-
-```text
-Cortex: Enable for Workspace
-Cortex: Resume Project
-Cortex: Save Checkpoint
-Cortex: Route Task & Ensure Skills
-Cortex: Verify Workspace
-Cortex: Security Audit
-Cortex: Show Status
-Cortex: Doctor
-```
-
-Then normal prompts such as these can use the Cortex workflow:
+After the initializer reports **Cortex Ready**, use Antigravity normally. There is no required Cortex command sequence and no special prompt format.
 
 ```text
 Build the authentication flow and verify it.
@@ -236,6 +239,8 @@ Fix this UI and inspect every important interaction.
 ```text
 continue
 ```
+
+Cortex still exposes advanced commands for debugging/manual control, but normal users do not need them.
 
 ## What happens when the agent tries to finish?
 
@@ -274,7 +279,8 @@ See [`docs/SECURITY.md`](docs/SECURITY.md).
 
 | Command | Purpose |
 |---|---|
-| `Cortex: Enable for Workspace` | Give Cortex primary ownership of an eligible workspace |
+| `Cortex: Initialize Project (One Click)` | Perform the complete one-time project setup |
+| `Cortex: Enable for Workspace` | Legacy alias for the one-click initializer |
 | `Cortex: Disable for Workspace` | Remove Cortex workspace activation |
 | `Cortex: Save Checkpoint` | Persist the current repository/task state |
 | `Cortex: Resume Project` | Rebuild a compact resume capsule from actual state |
@@ -291,7 +297,7 @@ See [`docs/SECURITY.md`](docs/SECURITY.md).
 The production package has passed the complete local verification suite, including clean-room extraction and package checks.
 
 ```text
-16 / 16 automated tests passed
+17 / 17 automated tests passed
 ```
 
 Run the same checks locally:
@@ -301,7 +307,7 @@ npm test
 npm run check
 ```
 
-Release installers, packaged source, the verification report, and checksums are published as verified assets on the [Cortex v1.0.0 GitHub Release](https://github.com/cassielxyz/cortex/releases/tag/v1.0.0). The source tree and CI remain available for independent auditing and rebuilds.
+Release installers, packaged source, the verification report, and checksums are published as verified assets on the [latest Cortex GitHub Release](https://github.com/cassielxyz/cortex/releases/latest). The source tree and CI remain available for independent auditing and rebuilds.
 
 ## Repository map
 
