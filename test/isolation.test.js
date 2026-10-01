@@ -34,6 +34,19 @@ test('clean workspace gets isolated Cortex plugin and project id',()=>{
   fs.rmSync(w,{recursive:true,force:true});
 });
 
+test('re-enabling an existing workspace refreshes Cortex plugin without losing ownership',()=>{
+  const w=tmp();
+  try{
+    const first=core.enableWorkspace({workspace:w,extensionRoot:path.resolve(__dirname,'..')});
+    assert.equal(first.owner,'cortex');
+    fs.writeFileSync(path.join(w,'.agents','plugins','cortex','stale.tmp'),'old');
+    const second=core.enableWorkspace({workspace:w,extensionRoot:path.resolve(__dirname,'..')});
+    assert.equal(second.owner,'cortex');
+    assert.equal(core.canExecute(w).ok,true);
+    assert.equal(fs.existsSync(path.join(w,'.agents','plugins','cortex','plugin.json')),true);
+  }finally{fs.rmSync(w,{recursive:true,force:true});}
+});
+
 test('namespaced skills cannot overwrite foreign names',()=>{
   assert.equal(core.namespacedSkillName('UI UX Pro Max'),'cortex-ui-ux-pro-max');
   assert.equal(core.namespacedSkillName('dockyardos'),'cortex-dockyardos');
