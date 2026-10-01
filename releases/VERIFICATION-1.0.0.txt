@@ -1,58 +1,8 @@
-Cortex for Antigravity v1.0.0 — Verification Report
-Date: 2026-10-02
-
-RESULT: PASS
-
-Automated test suite:
-- 16 tests passed
-- 0 failed
-
-Covered behavior:
-- DockyardOS repository hard-block
-- foreign-orchestrator default block
-- observer mode has no execution authority
-- workspace-only Cortex plugin installation
-- Git-local excludes prevent Cortex workspace files from appearing in normal git status/commits
-- stable project identity and isolated state
-- stale-checkpoint reconciliation
-- resume capsule trusts current repository state
-- hot/warm/cold context prioritization
-- UI/debug task routing
-- namespaced skill rewriting
-- redacted deterministic secret scan
-- trusted static skill installation using a local Git source, exact commit provenance and no upstream installer execution
-- native project verification command execution
-- Antigravity PreInvocation context hook
-- event capture / completion-gate Stop hook
-- observer-mode hook passivity
-
-Static/package verification:
-- package identity and plugin namespace validated
-- plugin hooks and disabled-by-default Inspo MCP config validated
-- allow-listed catalog uniqueness and HTTPS GitHub sources validated
-- all bundled skills contain frontmatter
-- extension, core modules and plugin scripts pass `node --check`
-- source ZIP archive integrity: PASS
-- VSIX archive integrity: PASS
-- plugin ZIP archive integrity: PASS
-- source ZIP extracted to a clean directory and full `node scripts/verify.js` rerun: PASS
-- VSIX extracted and extension/plugin manifests + JavaScript syntax checked: PASS
-- plugin ZIP extracted and hook/plugin checks rerun: PASS
-
-Network limitation during build verification:
-The build container cannot resolve github.com, so live `git clone` of the public skill allow-list could not be executed here. The installer itself was tested end-to-end using a real local Git repository. Current upstream repository/path assumptions were separately checked using current web documentation/search. At runtime, Cortex records clone/fetch failures instead of treating a missing skill as installed.
-
-Security defaults:
-- third-party install scripts are never executed by Cortex skill installation
-- skill copies are namespaced `cortex-*`
-- symlinks and oversized skill payloads are rejected
-- Inspo MCP disabled by default
-- external scanners disabled by default
-- Strix requires explicit authorized configuration
-- built-in secret findings are redacted
-- Cortex state lives outside project repositories
-
-SHA-256:
-13ae99f48ad110e77622218139a817e3f723bdc9184c00b4c0a824e8f1dd9205  antigravity-cortex-1.0.0.vsix
-c5df95af55ad8d138d4127c0f90f2c6cd0d5c0d662426587256fb49523d09117  antigravity-cortex-1.0.0-source.zip
-c9a6fd3531f4237f3df58221f92c0f466eb961ded266b014eeec7e5d8ece3a4e  antigravity-cortex-plugin-1.0.0.zip
+Cortex v1.0.0 verification
+==============================
+Source commit: 6021dfe4767e663852856aa919762cbeb5cd4c09
+GitHub workflow: Verify Cortex
+Automated tests: PASS
+Production verifier: PASS
+Release packaging: PASS
+Generated on: 2026-10-01T20:28:08Z
