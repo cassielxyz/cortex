@@ -13,6 +13,8 @@ const {runSecurityAudit}=require('./security');
 const {doctor}=require('./doctor');
 const {setInspo}=require('./mcp');
 
+const INITIALIZATION_SCHEMA=2;
+
 function receiptPath(workspace){return path.join(workspaceStateDir(workspace).dir,'initialization.json');}
 function readInitializationReceipt(workspace){
   const stateReceipt=readJson(receiptPath(workspace),null);
@@ -21,7 +23,7 @@ function readInitializationReceipt(workspace){
 }
 function writeInitializationReceipt(workspace,receipt){
   const {dir}=workspaceStateDir(workspace);ensureDir(dir);
-  const normalized={schema:1,...receipt,updatedAt:new Date().toISOString()};
+  const normalized={schema:INITIALIZATION_SCHEMA,...receipt,updatedAt:new Date().toISOString()};
   atomicWriteJson(receiptPath(workspace),normalized);
   const markerFile=path.join(workspace,WORKSPACE_MARKER_REL);
   const marker=readJson(markerFile,null);
@@ -36,8 +38,9 @@ function initializationStatus(workspace){
   const isolation=isolationStatus(workspace);
   const receipt=readInitializationReceipt(workspace);
   const pluginPresent=fs.existsSync(path.join(workspace,WORKSPACE_PLUGIN_REL,'plugin.json'));
-  const initialized=Boolean(isolation.enabled&&pluginPresent&&receipt?.status==='complete');
-  return{initialized,health:receipt?.health||null,receipt,pluginPresent,isolation};
+  const schemaCurrent=Number(receipt?.schema||0)>=INITIALIZATION_SCHEMA;
+  const initialized=Boolean(isolation.enabled&&pluginPresent&&receipt?.status==='complete'&&schemaCurrent);
+  return{initialized,health:schemaCurrent?(receipt?.health||null):'upgrade-required',receipt,pluginPresent,isolation,schemaCurrent,requiredSchema:INITIALIZATION_SCHEMA};
 }
 function progress(onProgress,message,increment=0){try{onProgress?.({message,increment});}catch{}}
 
@@ -59,7 +62,7 @@ async function initializeProject({
   const before=initializationStatus(workspace);
   if(before.initialized&&!force)return{...before.receipt,alreadyInitialized:true,pluginPresent:true};
 
-  progress(onProgress,'Checking workspace ownership…',3);
+  progress(onProgress,before.schemaCurrent?'Checking workspace ownership…':'Upgrading Cortex project runtime…',3);
   const marker=enableWorkspace({workspace,extensionRoot,foreignPolicy});
   if(marker.mode==='observer'){
     const observerReceipt=writeInitializationReceipt(workspace,{status:'observer',health:'observer',mode:'observer',extensionVersion,startedAt:new Date().toISOString(),completedAt:new Date().toISOString(),reason:'foreign-orchestrator-present'});
@@ -67,16 +70,16 @@ async function initializeProject({
   }
 
   const startedAt=new Date().toISOString();
-  writeInitializationReceipt(workspace,{status:'running',health:'initializing',mode:'primary',extensionVersion,startedAt});
+  writeInitializationReceipt(workspace,{status:'running',health:'initializing',mode:'primary',extensionVersion,startedAt,upgradeFromSchema:Number(before.receipt?.schema||0)||null});
   try{
     progress(onProgress,'Creating recovery baseline…',5);
-    createCheckpoint(workspace,'initialization-start',{nextAction:'Finish Cortex project initialization.'},{maxHistory:maxCheckpointHistory});
+    createCheckpoint(workspace,'initialization-start',{nextAction:'Finish Cortex project initialization or upgrade.'},{maxHistory:maxCheckpointHistory});
 
     let skills=[];
     if(installSkills){
       const catalog=loadSkillCatalog(extensionRoot);
       const ids=(catalog.skills||[]).filter(x=>x.trusted===true).map(x=>x.id);
-      progress(onProgress,`Installing ${ids.length} trusted skills…`,18);
+      progress(onProgress,`Installing or refreshing ${ids.length} trusted skills…`,18);
       skills=await ensureSkills({extensionRoot,ids,scope:skillScope});
     }
 
@@ -101,6 +104,7 @@ async function initializeProject({
     const health=doctorReport.ready&&failedSkills.length===0&&!['fail','error'].includes(verification.status)&&!['fail','error'].includes(securityReport.status)?'ready':'needs-attention';
     const receipt=writeInitializationReceipt(workspace,{
       status:'complete',health,mode:'primary',extensionVersion,startedAt,completedAt:new Date().toISOString(),
+      capabilities:['automatic-task-routing','cinematic-web-v2','visual-fidelity-gate','gsap-scroll','threejs-routing','21st-ui-review'],
       skills:{requested:skills.length,installed:skills.filter(x=>x.status==='installed').length,present:skills.filter(x=>x.status==='present').length,failed:failedSkills.map(x=>({id:x.id,error:x.error}))},
       verification:{status:verification.status},security:{status:securityReport.status},doctor:{ready:doctorReport.ready},mcp:{inspoDisabled:inspo.disabled===true}
     });
@@ -114,4 +118,4 @@ async function initializeProject({
     throw error;
   }
 }
-module.exports={receiptPath,readInitializationReceipt,writeInitializationReceipt,initializationStatus,initializeProject};
+module.exports={INITIALIZATION_SCHEMA,receiptPath,readInitializationReceipt,writeInitializationReceipt,initializationStatus,initializeProject};
