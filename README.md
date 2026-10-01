@@ -301,7 +301,7 @@ npm test
 npm run check
 ```
 
-Release verification details and checksums are included under [`dist/`](dist/). The installable VSIX is intentionally generated from source so the repository remains easy to audit.
+Release installers, packaged source, the verification report, and checksums are published under [`releases/`](releases/). The source tree and CI remain available for independent auditing and rebuilds.
 
 ## Repository map
 
@@ -311,7 +311,8 @@ cortex/
 ├── assets/               Cortex branding
 ├── catalog/              trusted skill routing catalog
 ├── docs/                 architecture, isolation, install and security docs
-├── dist/                 verification report + checksums
+├── dist/                 generated local build output
+├── releases/             prebuilt VSIX, plugin/source ZIPs + verification files
 ├── scripts/              package and verification helpers
 ├── src/                  Cortex runtime
 ├── test/                 isolation, memory, routing and security tests
